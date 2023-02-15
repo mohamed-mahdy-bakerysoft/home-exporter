@@ -3,7 +3,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"EditorConfig.EditorConfig"
+				"EditorConfig.EditorConfig",
+                "charliermarsh.ruff"
 			]
 		}
 	}
