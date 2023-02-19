@@ -16,7 +16,8 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
 )
 
-grdf = API(os.environ.get("CLIENT_ID"), os.environ.get("CLIENT_SECRET"))
+# https://github.com/lowatt/lowatt-grdf/pull/17
+# grdf = API(os.environ.get("CLIENT_ID"), os.environ.get("CLIENT_SECRET"))
 db = influxdb_client.InfluxDBClient(
    url=os.environ.get("INFLUXDB_URL"),
    token=os.environ.get("INFLUXDB_TOKEN"),
@@ -25,6 +26,7 @@ db = influxdb_client.InfluxDBClient(
 write_api = db.write_api(write_options=SYNCHRONOUS)
 
 def fetch():
+    grdf = API(os.environ.get("CLIENT_ID"), os.environ.get("CLIENT_SECRET"))
     today = date.today() - timedelta(days=2)
     delta = timedelta(days=5)
 
