@@ -5,12 +5,13 @@ import os
 from datetime import date,timedelta,datetime
 
 from schedule import every, repeat
-from lowatt_grdf.api import API
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
 
+from lowatt_grdf.api import API
 # https://github.com/lowatt/lowatt-grdf/pull/17
 # grdf = API(os.environ.get("CLIENT_ID"), os.environ.get("CLIENT_SECRET"))
+
 db = influxdb_client.InfluxDBClient(
    url=os.environ.get("INFLUXDB_URL"),
    token=os.environ.get("INFLUXDB_TOKEN"),
