@@ -7,6 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY main.py ./
 COPY grdf_exporter/ ./grdf_exporter/
-COPY s7_exporter ./
+COPY s7_exporter/ ./grdf_exporter/
 
 CMD [ "python", "main.py" ]
