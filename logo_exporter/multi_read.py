@@ -8,7 +8,8 @@ logger = logging.getLogger(__name__)
 
 class LogoMulti(snap7.logo.Logo):
     def read_multi(self, vm_addresses: list[str]):
-        """Reads from VM addresses of Siemens Logo. Examples: read("V40") / read("VW64") / read("V10.2")
+        """Reads from VM addresses of Siemens Logo.
+        Examples: read("V40") / read("VW64") / read("V10.2")
 
         Args:
             vm_addresses: of Logo memory (e.g. V30.1, VW32, V24)
@@ -64,8 +65,6 @@ class LogoMulti(snap7.logo.Logo):
             pBuffer = ctypes.cast(ctypes.pointer(buffer),
                                 ctypes.POINTER(ctypes.c_uint8))
             data_items[i].pData = pBuffer
-
-        logger.debug(f"start:{start}, wordlen:{wordlen.name}={wordlen.value}, data-length:{len(data)}")
 
         result = self.library.Cli_ReadMultiVars(
             self.pointer,
