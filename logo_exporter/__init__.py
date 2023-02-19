@@ -9,9 +9,9 @@ import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 import snap7
-import multi_read
+import logo_exporter.multi_read
 import ctypes
-plc = multi_read.LogoMulti()
+plc = logo_exporter.multi_read.LogoMulti()
 
 db = influxdb_client.InfluxDBClient(
    url=os.environ.get("INFLUXDB_URL"),

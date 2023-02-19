@@ -10,7 +10,7 @@ from schedule import run_pending
 
 load_dotenv()
 
-import grdf_exporter
+import logo_exporter
 
 sentry_sdk.init(
     dsn=os.environ.get("SENTRY_DSN"),
