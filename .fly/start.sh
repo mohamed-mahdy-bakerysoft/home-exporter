@@ -1,9 +1,12 @@
 #!/bin/sh
 
+# Make sure Snap7 lib is available
+pip install --force-reinstall python-snap7
+
+# Run Tailscale
 /usr/src/app/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/var/run/tailscale/tailscaled.sock &
 sleep 2
 /usr/src/app/tailscale up --authkey="${TAILSCALE_AUTHKEY}" --hostname=fly-home-exporter --accept-routes
 
-pip install --force-reinstall <package>
-
+# Run exporter
 python /usr/src/app/main.py
