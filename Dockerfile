@@ -8,16 +8,18 @@ FROM python:3
 
 WORKDIR /usr/src/app
 
-RUN add-apt-repository ppa:gijzelaar/snap7
 RUN apt-get update && apt-get install -y \
-  ca-certificates \
-  iptables \
-  ip6tables \
-  libsnap7-1 \
-  libsnap7-dev \
+    ca-certificates \
+    iptables \
+    ip6tables \
+    software-properties-common \
+  && add-apt-repository ppa:gijzelaar/snap7 \
+  && apt-get update && apt-get install -y \
+    libsnap7-1 \
+    libsnap7-dev \
   && rm -rf /var/lib/apt/lists/*
-COPY --from=tailscale /app/tailscaled /app/tailscaled
-COPY --from=tailscale /app/tailscale /app/tailscale
+COPY --from=tailscale /app/tailscaled /usr/src/app/tailscaled
+COPY --from=tailscale /app/tailscale /usr/src/app/tailscale
 RUN mkdir -p /var/run/tailscale /var/cache/tailscale /var/lib/tailscale
 
 COPY requirements.txt ./
