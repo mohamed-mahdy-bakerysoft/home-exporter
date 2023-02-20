@@ -6,9 +6,16 @@ import atexit
 
 import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
-import influxdb_exporter.singleton
 
-@influxdb_exporter.singleton
+def singleton(class_):
+    instances = {}
+    def getinstance(*args, **kwargs):
+        if class_ not in instances:
+            instances[class_] = class_(*args, **kwargs)
+        return instances[class_]
+    return getinstance
+
+@singleton
 class InfluxDB:
     def __init__(self) -> None:
         self.db = influxdb_client.InfluxDBClient(
