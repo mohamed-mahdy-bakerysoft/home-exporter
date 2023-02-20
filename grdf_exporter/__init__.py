@@ -5,19 +5,12 @@ import os
 from datetime import date,timedelta,datetime
 
 from schedule import every, repeat
-import influxdb_client
-from influxdb_client.client.write_api import SYNCHRONOUS
+from influxdb_client import Point
+import influxdb_exporter
 
 from lowatt_grdf.api import API
 # https://github.com/lowatt/lowatt-grdf/pull/17
 # grdf = API(os.environ.get("CLIENT_ID"), os.environ.get("CLIENT_SECRET"))
-
-db = influxdb_client.InfluxDBClient(
-   url=os.environ.get("INFLUXDB_URL"),
-   token=os.environ.get("INFLUXDB_TOKEN"),
-   org=os.environ.get("INFLUXDB_ORG")
-)
-write_api = db.write_api(write_options=SYNCHRONOUS)
 
 def fetch():
     grdf = API(os.environ.get("CLIENT_ID"), os.environ.get("CLIENT_SECRET"))
@@ -34,7 +27,7 @@ def fetch():
             to_date=(start).isoformat()
         ):
             conso = releve["consommation"]
-            points.append(influxdb_client.Point("grdf")
+            points.append(Point("grdf")
                 .field("energy", conso["energie"])
                 .tag("year", start.year)
                 .time(datetime.fromisoformat(conso["date_fin_consommation"]).replace(year=today.year))
@@ -42,13 +35,6 @@ def fetch():
 
     return points
 
-def push(points):
-    write_api.write(
-        bucket=os.environ.get("INFLUXDB_BUCKET"),
-        org=os.environ.get("INFLUXDB_ORG"),
-        record=points
-    )
-
 @repeat(every(12).hours)
 def grdf_exporter():
-    push(fetch())
+    influxdb_exporter.push(fetch())

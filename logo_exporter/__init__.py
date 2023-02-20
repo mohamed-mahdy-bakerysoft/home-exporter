@@ -4,19 +4,12 @@
 import os
 
 from schedule import every, repeat
-import influxdb_client
-from influxdb_client.client.write_api import SYNCHRONOUS
+from influxdb_client import Point
+import influxdb_exporter
 
 import logo_exporter.multi_read
 plc = logo_exporter.multi_read.LogoMulti()
 plc.connect(os.environ.get("PLC_IP_ADDR"), 0x0100, 0x2000)
-
-db = influxdb_client.InfluxDBClient(
-   url=os.environ.get("INFLUXDB_URL"),
-   token=os.environ.get("INFLUXDB_TOKEN"),
-   org=os.environ.get("INFLUXDB_ORG")
-)
-write_api = db.write_api(write_options=SYNCHRONOUS)
 
 def fetch():
     if plc.get_connected():
@@ -39,7 +32,7 @@ def fetch():
         results["948"] = plc.byte_to_bool(results["948"], 8)
         results["949"] = plc.byte_to_bool(results["949"], 4)
 
-        point = (influxdb_client.Point("logo")
+        point = (Point("logo")
             .field("I01", results["923"][0])
             .field("I02", results["923"][1])
             .field("I03", results["923"][2])
@@ -74,17 +67,10 @@ def fetch():
             .field("M12", results["949"][3])
         )
 
-        return point
+        return [point]
     else:
         print("Conncetion failed")
 
-def push(points):
-    write_api.write(
-        bucket=os.environ.get("INFLUXDB_BUCKET"),
-        org=os.environ.get("INFLUXDB_ORG"),
-        record=points
-    )
-
 @repeat(every(1).second)
 def logo_exporter():
-    push(fetch())
+    influxdb_exporter.push(fetch())
