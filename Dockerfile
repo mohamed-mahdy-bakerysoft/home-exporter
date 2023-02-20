@@ -11,7 +11,6 @@ WORKDIR /usr/src/app
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     iptables \
-    ip6tables \
     software-properties-common \
   && add-apt-repository ppa:gijzelaar/snap7 \
   && apt-get update && apt-get install -y \
