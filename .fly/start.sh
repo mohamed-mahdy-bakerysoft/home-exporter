@@ -4,4 +4,6 @@
 sleep 2
 /usr/src/app/tailscale up --authkey="${TAILSCALE_AUTHKEY}" --hostname=fly-home-exporter --accept-routes
 
+pip install --force-reinstall <package>
+
 python /usr/src/app/main.py
