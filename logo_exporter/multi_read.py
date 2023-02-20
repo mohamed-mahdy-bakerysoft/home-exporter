@@ -1,7 +1,6 @@
 import snap7
 import ctypes
 import re
-import struct
 import logging
 
 logger = logging.getLogger(__name__)
@@ -60,7 +59,10 @@ class LogoMulti(snap7.logo.Logo):
 
         return data_items
 
-    def _read_multi(self, data_items: list[snap7.types.S7DataItem]) -> list[snap7.types.S7DataItem]:
+    def _read_multi(
+        self,
+        data_items: list[snap7.types.S7DataItem]
+    ) -> list[snap7.types.S7DataItem]:
         """Reads from VM addresses of Siemens Logo.
         Examples: read("V40") / read("VW64") / read("V10.2")
 
