@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     iptables \
     software-properties-common \
-  && add-apt-repository ppa:gijzelaar/snap7 \
-  && apt-get update && apt-get install -y \
+  && add-apt-repository -u ppa:gijzelaar/snap7 \
+  && apt-get install -y -t bullseye \
     libsnap7-1 \
     libsnap7-dev \
   && rm -rf /var/lib/apt/lists/*
