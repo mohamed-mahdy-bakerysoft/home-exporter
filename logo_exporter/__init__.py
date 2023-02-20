@@ -2,17 +2,34 @@
 # -*- coding: utf-8 -*-
 
 import os
+import atexit
+from datetime import datetime
 
 from schedule import every, repeat
+from sentry_sdk import capture_exception
 from influxdb_client import Point
 import influxdb_exporter
 
 import logo_exporter.multi_read
 plc = logo_exporter.multi_read.LogoMulti()
-plc.connect(os.environ.get("PLC_IP_ADDR"), 0x0100, 0x2000)
+last_result = {}
+
+def on_exit(plc: logo_exporter.multi_read.LogoMulti):
+    """Close clients after terminate a script.
+
+    :param db_client: InfluxDB client
+    :param write_api: WriteApi
+    :return: nothing
+    """
+    plc.disconnect()
+    plc.destroy()
+atexit.register(on_exit, plc)
 
 def fetch():
-    if plc.get_connected():
+    try:
+        if not plc.get_connected():
+            plc.connect(os.environ.get("PLC_IP_ADDR"), 0x0100, 0x2000)
+
         results = plc.read_multi([
             "V923", # I01 => I08
             "V924", # I09 => I12
@@ -22,55 +39,69 @@ def fetch():
             "V948", # M01 => M08
             "V949", # M09 => M12
 
-            "VW952", # AM01
-            "VW954", # AM02
-            "VW956", # AM03
+            # "VW952", # AM01
+            # "VW954", # AM02
+            # "VW956", # AM03
         ])
-        results["923"] = plc.byte_to_bool(results["923"], 8)
-        results["924"] = plc.byte_to_bool(results["924"], 4)
-        results["942"] = plc.byte_to_bool(results["942"], 8)
-        results["948"] = plc.byte_to_bool(results["948"], 8)
-        results["949"] = plc.byte_to_bool(results["949"], 4)
+        results["923"] = plc.byte_to_bool(results["923"])
+        results["924"] = plc.byte_to_bool(results["924"])
+        results["942"] = plc.byte_to_bool(results["942"])
+        results["948"] = plc.byte_to_bool(results["948"])
+        results["949"] = plc.byte_to_bool(results["949"])
 
-        point = (Point("logo")
-            .field("I01", results["923"][0])
-            .field("I02", results["923"][1])
-            .field("I03", results["923"][2])
-            .field("I04", results["923"][3])
-            .field("I05", results["923"][4])
-            .field("I06", results["923"][5])
-            .field("I07", results["923"][6])
-            .field("I08", results["923"][7])
-            .field("I09", results["924"][0])
-            .field("I10", results["924"][1])
-            .field("I11", results["924"][2])
-            .field("I12", results["924"][3])
-            .field("Q01", results["942"][0])
-            .field("Q02", results["942"][1])
-            .field("Q03", results["942"][2])
-            .field("Q04", results["942"][3])
-            .field("Q05", results["942"][4])
-            .field("Q06", results["942"][5])
-            .field("Q07", results["942"][6])
-            .field("Q08", results["942"][7])
-            .field("M01", results["948"][0])
-            .field("M02", results["948"][1])
-            .field("M03", results["948"][2])
-            .field("M04", results["948"][3])
-            .field("M05", results["948"][4])
-            .field("M06", results["948"][5])
-            .field("M07", results["948"][6])
-            .field("M08", results["948"][7])
-            .field("M09", results["948"][0])
-            .field("M10", results["949"][1])
-            .field("M11", results["949"][2])
-            .field("M12", results["949"][3])
-        )
+        dict_results = {
+            "I01": results["923"][0],
+            "I02": results["923"][1],
+            "I03": results["923"][2],
+            "I04": results["923"][3],
+            "I05": results["923"][4],
+            "I06": results["923"][5],
+            "I07": results["923"][6],
+            "I08": results["923"][7],
+            "I09": results["924"][0],
+            "I10": results["924"][1],
+            "I11": results["924"][2],
+            "I12": results["924"][3],
+            "Q01": results["942"][0],
+            "Q02": results["942"][1],
+            "Q03": results["942"][2],
+            "Q04": results["942"][3],
+            "Q05": results["942"][4],
+            "Q06": results["942"][5],
+            "Q07": results["942"][6],
+            "Q08": results["942"][7],
+            "M01": results["948"][0],
+            "M02": results["948"][1],
+            "M03": results["948"][2],
+            "M04": results["948"][3],
+            "M05": results["948"][4],
+            "M06": results["948"][5],
+            "M07": results["948"][6],
+            "M08": results["948"][7],
+            "M09": results["948"][0],
+            "M10": results["949"][1],
+            "M11": results["949"][2],
+            "M12": results["949"][3],
+        }
 
-        return [point]
-    else:
-        print("Conncetion failed")
+        global last_result
+        if dict_results == last_result:
+            return
+
+        point = Point.from_dict({
+            "measurement": "logo",
+            "fields": dict_results,
+            "time": datetime.now()
+        })
+
+        last_result = dict_results
+
+        return point
+    except Exception as e:
+        capture_exception(e)
 
 @repeat(every(1).second)
 def logo_exporter():
-    influxdb_exporter.push(fetch())
+    point = fetch()
+    if point:
+        influxdb_exporter.InfluxDB().push(point)

@@ -105,8 +105,8 @@ class LogoMulti(snap7.logo.Logo):
         data_items = self._data_items(vm_addresses)
         return self._data_results(self._read_multi(data_items))
 
-    def byte_to_bool(self, byte, size) -> dict:
+    def byte_to_bool(self, byte) -> dict:
         result = []
-        for i in range(size):
+        for i in range(8):
             result.append(snap7.util.get_bool(byte, 0, i))
         return result
