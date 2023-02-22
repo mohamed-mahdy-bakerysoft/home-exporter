@@ -56,7 +56,10 @@ def fetch() -> Point:
                     .tag("year", start.year)
                     .field('temperature_min', result['daily']['temperature_2m_min'][i])
                     .field('temperature_max', result['daily']['temperature_2m_max'][i])
-                    .field('temperature_mean', result['daily']['temperature_2m_mean'][i])
+                    .field(
+                        'temperature_mean',
+                        result['daily']['temperature_2m_mean'][i]
+                    )
                     .field('degree_day', hdd(
                         result['daily']['temperature_2m_min'][i],
                         result['daily']['temperature_2m_max'][i],
