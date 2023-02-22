@@ -27,10 +27,6 @@ RUN apt-get update && apt-get install -y \
 COPY --from=tailscale /app/tailscaled /usr/src/app/tailscaled
 COPY --from=tailscale /app/tailscale /usr/src/app/tailscale
 COPY --from=builder /usr/src/.venv /usr/src/app/.venv
-
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
 COPY . .
 
 CMD [".fly/start.sh"]
