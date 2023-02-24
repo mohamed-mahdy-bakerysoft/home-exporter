@@ -9,9 +9,8 @@ from sentry_sdk import capture_exception
 from influxdb_client import Point
 import influxdb_exporter
 
-from lowatt_grdf.api import API
-# https://github.com/lowatt/lowatt-grdf/pull/17
-# grdf = API(os.environ.get("GRDF_CLIENT_ID"), os.environ.get("GRDF_CLIENT_SECRET"))
+from lowatt_enedis.api import API
+enedis = API(os.environ.get("ENEDIS_CLIENT_ID"), os.environ.get("ENEDIS_CLIENT_SECRET"))
 
 def fetch():
     today = date.today() - timedelta(days=1)
@@ -20,12 +19,10 @@ def fetch():
     points = []
 
     try:
-        grdf = API(os.environ.get("GRDF_CLIENT_ID"), os.environ.get("GRDF_CLIENT_SECRET"))
-
         for year in range(3):
             start = today.replace(year=today.year - year)
-            for releve in grdf.donnees_consos_informatives(
-                os.environ.get("PCE"),
+            for releve in enedis.donnees_consos_informatives(
+                os.environ.get("PDL"),
                 from_date=(start - delta).isoformat(),
                 to_date=(start).isoformat()
             ):
@@ -42,7 +39,7 @@ def fetch():
     return points
 
 @repeat(every(12).hours)
-def grdf_exporter():
+def enedis_exporter():
     points = fetch()
     for point in points:
         influxdb_exporter.InfluxDB().push(point)
