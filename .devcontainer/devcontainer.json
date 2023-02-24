@@ -11,5 +11,6 @@
     "runArgs": ["--device=/dev/net/tun"],
     "features": {
       "ghcr.io/tailscale/codespace/tailscale": {}
-    }
+    },
+    "postCreateCommand": "pipenv install --dev"
 }
