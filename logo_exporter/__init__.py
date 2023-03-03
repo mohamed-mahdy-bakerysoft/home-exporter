@@ -99,6 +99,7 @@ def fetch():
         return point
     except Exception as e:
         capture_exception(e)
+        plc.disconnect()
 
 @repeat(every(1).second)
 def logo_exporter():
