@@ -5,7 +5,7 @@
         ":disableDependencyDashboard"
     ],
     "labels": ["dependencies"],
-    "rangeStrategy": "update-lockfile",
+    "rangeStrategy": "bump",
     "packageRules": [
         {
             "matchUpdateTypes": ["minor", "patch"],
