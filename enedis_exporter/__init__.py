@@ -35,7 +35,7 @@ def fetch():
                     .tag("year", start.year)
                     .field(
                         data["meter_reading"]["reading_type"]["measurement_kind"],
-                        releve["value"]
+                        int(releve["value"])
                     )
                 )
 
