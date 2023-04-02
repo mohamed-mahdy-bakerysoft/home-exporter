@@ -50,7 +50,7 @@ def fetch():
 
     return points
 
-@repeat(every(12).hours)
+@repeat(every().day.at("15:05"))
 def grdf_exporter():
     points = fetch()
     for point in points:
