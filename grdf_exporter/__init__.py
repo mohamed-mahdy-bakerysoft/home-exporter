@@ -10,11 +10,10 @@ from influxdb_client import Point
 import influxdb_exporter
 
 from lowatt_grdf.api import API
-# https://github.com/lowatt/lowatt-grdf/pull/17
-# grdf = API(
-#     os.environ.get("GRDF_CLIENT_ID"),
-#     os.environ.get("GRDF_CLIENT_SECRET")
-# )
+grdf = API(
+    os.environ.get("GRDF_CLIENT_ID"),
+    os.environ.get("GRDF_CLIENT_SECRET")
+)
 
 def fetch():
     today = date.today() - timedelta(days=1)
@@ -23,11 +22,6 @@ def fetch():
     points = []
 
     try:
-        grdf = API(
-            os.environ.get("GRDF_CLIENT_ID"),
-            os.environ.get("GRDF_CLIENT_SECRET")
-        )
-
         for year in range(3):
             start = today.replace(year=today.year - year)
             for releve in grdf.donnees_consos_informatives(
