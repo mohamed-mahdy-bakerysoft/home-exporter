@@ -1,13 +1,18 @@
+# fly.toml app configuration file generated for home-exporter on 2023-04-27T09:45:33Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
 app = "home-exporter"
+primary_region = "cdg"
 kill_signal = "SIGINT"
-kill_timeout = 5
-processes = []
+kill_timeout = "5s"
+
+[experimental]
+  auto_rollback = true
 
 [deploy]
   strategy = "rolling"
 
 [env]
   ENV = "production"
-
-[experimental]
-  auto_rollback = true
