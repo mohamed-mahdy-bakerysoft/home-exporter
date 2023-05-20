@@ -20,7 +20,7 @@ def hdd(Tn: float, Tx: float, Tmoy: float, Tref: float=18.0) -> float:
     if Tref > Tx:
         return Tref - (Tmoy if Tmoy else ((Tn + Tx) / 2))
     elif Tref <= Tn:
-        return 0
+        return 0.0
     else:
         return (Tref - Tn) * (0.08 + 0.42 * (Tref - Tn) / (Tx - Tn))
 
