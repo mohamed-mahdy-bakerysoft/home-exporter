@@ -30,7 +30,7 @@ def fetch():
                 to_date=(start).isoformat()
             )
             for releve in data["meter_reading"]["interval_reading"]:
-                points.append(Point("enedis")
+                points.append(Point("enedis_v2")
                     .time(datetime.fromisoformat(releve["date"]).replace(year=today.year))
                     .tag("year", start.year)
                     .field(
@@ -42,7 +42,6 @@ def fetch():
     except Exception as e:
         capture_exception(e)
 
-    print("done")
     return points
 
 @repeat(every().day.at("13:37"))
