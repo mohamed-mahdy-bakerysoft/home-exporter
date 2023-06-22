@@ -16,12 +16,13 @@ enedis = enedis_exporter.enedis.API(
 )
 
 def fetch():
-    today = date.today() - timedelta(days=0)
-    delta = timedelta(days=7)
+    today = date.today()
 
     points = []
 
     try:
+        # Daily
+        delta = timedelta(days=7)
         for year in range(3):
             start = today.replace(year=today.year - year)
             data = enedis.daily_consumption(
@@ -38,6 +39,21 @@ def fetch():
                         int(releve["value"])
                     )
                 )
+        # Hourly
+        delta = timedelta(days=1)
+        data = enedis.consumption_load_curve(
+            os.environ.get("PDL"),
+            from_date=(today - delta).isoformat(),
+            to_date=(today).isoformat()
+        )
+        for releve in data["meter_reading"]["interval_reading"]:
+            points.append(Point("enedis_hour_v1")
+                .time(datetime.fromisoformat(releve["date"]))
+                .field(
+                    data["meter_reading"]["reading_type"]["measurement_kind"],
+                    int(releve["value"])
+                )
+            )
 
     except Exception as e:
         capture_exception(e)
