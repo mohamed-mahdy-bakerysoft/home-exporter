@@ -12,6 +12,9 @@
             "automerge": true
         }
     ],
+    "lockFileMaintenance": {
+        "enabled": true
+    },
     "github-actions": {
         "enabled": false
     }
