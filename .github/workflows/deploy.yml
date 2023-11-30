@@ -6,12 +6,31 @@ on:
       - main
 
 jobs:
+  prepare:
+    name: Prepare app
+    runs-on: ubuntu-latest
+    outputs:
+      auth-key: ${{ steps.tailscale.outputs.auth-key }}
+    steps:
+      - uses: actions/setup-go@v4
+      - id: tailscale
+        env:
+          TS_API_CLIENT_ID: ${{ secrets.TS_API_CLIENT_ID }}
+          TS_API_CLIENT_SECRET: ${{ secrets.TS_API_CLIENT_SECRET }}
+        run: |
+          auth_key=$((go run tailscale.com/cmd/get-authkey@main -ephemeral -tags tag:local))
+          echo "::add-mask::$auth_key"
+          echo "auth-key=$auth_key" >> "$GITHUB_OUTPUT"
+
   deploy:
     name: Deploy app
     runs-on: ubuntu-latest
+    needs:
+      - prepare
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@dfdfedc86b296f5e5384f755a18bf400409a15d0 # 1.3
+      - run: flyctl secrets set TAILSCALE_AUTHKEY=${{ needs.prepare.outputs.auth-key }}
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
