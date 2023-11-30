@@ -13,6 +13,8 @@ jobs:
       auth-key: ${{ steps.tailscale.outputs.auth-key }}
     steps:
       - uses: actions/setup-go@v4
+        with:
+          go-version: stable
       - id: tailscale
         env:
           TS_API_CLIENT_ID: ${{ secrets.TS_API_CLIENT_ID }}
