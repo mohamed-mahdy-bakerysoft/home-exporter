@@ -15,11 +15,17 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version: stable
-      - run: flyctl secrets set --stage TAILSCALE_AUTHKEY=$(go run tailscale.com/cmd/get-authkey@main -ephemeral -tags tag:local)
+      - id: tailscale
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           TS_API_CLIENT_ID: ${{ secrets.TS_API_CLIENT_ID }}
           TS_API_CLIENT_SECRET: ${{ secrets.TS_API_CLIENT_SECRET }}
+        run: |
+          auth_key=$(go run tailscale.com/cmd/get-authkey@main -ephemeral -tags tag:local)
+          echo "::add-mask::$auth_key"
+          echo "auth-key=$auth_key" >> "$GITHUB_OUTPUT"
+      - run: flyctl secrets set --stage TAILSCALE_AUTHKEY=${{ steps.tailscale.outputs.auth-key }}
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
