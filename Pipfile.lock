@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7b2b917735df5b23f1d97e9db3f53f73cbe3c68770904cdf0806238f673cd6d5"
+            "sha256": "5f49585137445cda5ea0304a856b47202aece607caa927cb01aab68ebd3d555b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -218,19 +218,6 @@
             "markers": "python_version >= '3.8'",
             "version": "==1.0.1"
         },
-        "python-snap7": {
-            "hashes": [
-                "sha256:441d162f9dc08ab6790f1bd4e1940ca2fe8c0d9bdd7dda0ba4a4e7738dab82c8",
-                "sha256:5a7aaff9caceee34cfc3d0867d734990693430c353d56de08f7baaa05e7d0265",
-                "sha256:6eba58676033204e36e3ff957e3823c3076a20544f501a731b2ba62d96139cc6",
-                "sha256:c33ab26d7617ed527eaebdaf098f6947e70bb9338ada532db28397837a631831",
-                "sha256:f8bb72cf387b1af8e1e1b4bbbabf086ca7694c6024129c7a52054e3913f40ad6",
-                "sha256:fc2dada8e157a6e8f5e02b7a702f3103ec1d99ad2f06b69748a2c40405b3e229"
-            ],
-            "index": "pypi",
-            "markers": "python_version >= '3.7'",
-            "version": "==1.3"
-        },
         "reactivex": {
             "hashes": [
                 "sha256:0004796c420bd9e68aad8e65627d85a8e13f293de76656165dffbcb3a0e3fb6a",
@@ -302,7 +289,7 @@
                 "sha256:450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d",
                 "sha256:d0570876c61ab9e520d776c38acbbb5b05a776d3f9ff98a5c8fd5162a444cf19"
             ],
-            "markers": "python_version >= '3.8'",
+            "markers": "python_version >= '3.6'",
             "version": "==2.2.1"
         }
     },
