@@ -1,5 +1,3 @@
-FROM ghcr.io/tailscale/tailscale:v1.61.11 as tailscale
-
 FROM docker.io/python:3 AS builder
 WORKDIR /usr/src
 ENV PIPENV_VENV_IN_PROJECT=1
@@ -10,18 +8,6 @@ RUN /root/.local/bin/pipenv sync
 FROM docker.io/python:3
 WORKDIR /usr/src/app
 
-RUN mkdir -p \
-  /var/run/tailscale \
-  /var/cache/tailscale \
-  /var/lib/tailscale
-
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    iptables \
-  && rm -rf /var/lib/apt/lists/*
-
-COPY --from=tailscale /usr/local/bin/tailscaled /usr/src/app/tailscaled
-COPY --from=tailscale /usr/local/bin/tailscale /usr/src/app/tailscale
 COPY --from=builder /usr/src/.venv /usr/src/app/.venv
 COPY . .
 
