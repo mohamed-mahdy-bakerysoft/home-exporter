@@ -5,8 +5,7 @@ import os
 import atexit
 
 from sentry_sdk import capture_exception
-import influxdb_client
-from influxdb_client.client.write_api import SYNCHRONOUS
+from influxdb_client_3 import SYNCHRONOUS, InfluxDBClient3, write_client_options
 
 def singleton(class_):
     instances = {}
@@ -19,19 +18,19 @@ def singleton(class_):
 @singleton
 class InfluxDB:
     def __init__(self) -> None:
-        self.db = influxdb_client.InfluxDBClient(
-            url=os.environ.get("INFLUXDB_URL"),
+        self.db = InfluxDBClient3(
+            host=os.environ.get("INFLUXDB_URL"),
             token=os.environ.get("INFLUXDB_TOKEN"),
-            org=os.environ.get("INFLUXDB_ORG")
+            org=os.environ.get("INFLUXDB_ORG"),
+            database=os.environ.get("INFLUXDB_BUCKET"),
+            write_client_options=write_client_options(write_options=SYNCHRONOUS)
         )
-        self.write_api = self.db.write_api(write_options=SYNCHRONOUS)
         self.points = []
 
         atexit.register(self.on_exit)
 
     def on_exit(self):
-        return
-        self.write_api.close()
+        self.write()
         self.db.close()
 
     def push(self, points):
@@ -41,10 +40,7 @@ class InfluxDB:
         if len(self.points) <= 0:
             return
         try:
-            self.write_api.write(
-                bucket=os.environ.get("INFLUXDB_BUCKET"),
-                record=self.points
-            )
-            self.points = []
+            self.db.write(record=self.points)
+            self.points.clear()
         except Exception as e:
             capture_exception(e)

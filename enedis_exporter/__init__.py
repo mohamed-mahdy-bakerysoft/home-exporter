@@ -6,7 +6,7 @@ from datetime import date,timedelta,datetime
 
 from schedule import every, repeat
 from sentry_sdk import capture_exception
-from influxdb_client import Point
+from influxdb_client_3 import Point
 import influxdb_exporter
 
 import enedis_exporter.enedis
