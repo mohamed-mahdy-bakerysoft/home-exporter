@@ -70,7 +70,7 @@ def fetch() -> Point:
 
     return points
 
-@repeat(every(12).hours)
+@repeat(every(3).hours)
 def weather_exporter():
     points = fetch()
     for point in points:
