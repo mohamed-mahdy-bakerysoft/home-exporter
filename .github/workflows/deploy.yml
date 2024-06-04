@@ -9,5 +9,4 @@ jobs:
   fly:
     name: Fly.io
     uses: LeoColomb/.github/.github/workflows/deploy.yml@main
-    secrets:
-      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    secrets: inherit
