@@ -9,13 +9,13 @@ jobs:
       matrix:
         include:
           - name: GRDF_CLIENT_ID
-            id: "1e2401a2-1adf-4d3f-a9d1-b17800859a47"
+            id: "f0501f42-b8b4-444d-ba2d-0d57a75971f9"
           - name: GRDF_CLIENT_SECRET
-            id: "d50618d9-220e-4754-b0bf-b178008630b5"
+            id: "4277bc00-b687-49c4-bf7c-954c6e209c2f"
           - name: PCE
-            id: "08342bd1-3ce2-4102-b202-b17800865ef4"
+            id: "13ace5e4-ef3a-4af8-a0df-efe5c708e67b"
           - name: PDL
-            id: "d9214c8d-9c40-45e4-9a36-b17800867d98"
+            id: "633bf770-c8b4-43cb-b43a-e9c56515707e"
     name: Secrets
     uses: LeoColomb/.github/.github/workflows/secrets-sync.yml@main
     with:
