@@ -61,6 +61,7 @@ def fetch():
     return points
 
 @repeat(every().day.at("13:37"))
+@repeat(every().day.at("01:37"))
 def enedis_exporter():
     points = fetch()
     for point in points:
