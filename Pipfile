@@ -10,6 +10,7 @@ python-dotenv = "~=1.0"
 schedule = "~=1.2"
 sentry-sdk = "~=2.10"
 requests = "~=2.32"
+evohomeclient = "~=0.3.7"
 
 [dev-packages]
 ruff = "~=0.5"
