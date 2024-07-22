@@ -20,8 +20,8 @@ def fetch() -> Point:
     try:
         for device in client.temperatures():
             points.append(Point("evohome_v1")
-                .tag('zone', device.name)
-                .field('temperature', device.temp)
+                .tag('zone', device['name'])
+                .field('temperature', device['temp'])
             )
         # for location in client.locations:
         #     for zone in location._gateways[0]._control_systems[0].zones:
