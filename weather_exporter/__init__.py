@@ -25,7 +25,7 @@ def hdd(Tn: float, Tx: float, Tmoy: float, Tref: float=17.0) -> float:
         return (Tref - Tn) * (0.08 + 0.42 * (Tref - Tn) / (Tx - Tn))
 
 def reqData(
-    location: string,
+    location: str,
     latitude: float,
     longitude: float,
     start: date,
@@ -80,20 +80,20 @@ def fetch() -> Point:
     try:
         for year in range(3):
             points.extend(reqData(
-                location: 'Paris',
-                latitude: 48.83,
-                longitude: 2.35,
-                start: today.replace(year=today.year - year),
-                today: today,
-                delta: delta
+                location='Paris',
+                latitude=48.83,
+                longitude=2.35,
+                start=today.replace(year=today.year - year),
+                today=today,
+                delta=delta
             ))
         points.extend(reqData(
-            location: 'Copenhagen'
-            latitude: 55.68,
-            longitude: 12.57,
-            start: today,
-            today: today,
-            delta: delta
+            location='Copenhagen',
+            latitude=55.68,
+            longitude=12.57,
+            start=today,
+            today=today,
+            delta=delta
         ))
     except Exception as e:
         capture_exception(e)
