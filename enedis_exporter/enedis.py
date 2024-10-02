@@ -114,8 +114,8 @@ class BaseAPI(metaclass=abc.ABCMeta):
         )
 
 class StagingAPI(BaseAPI):
-    api = "https://ext.hml.api.enedis.fr"
+    api = "https://gw.ext.prod-sandbox.api.enedis.fr"
 
 
 class API(BaseAPI):
-    api = "https://ext.prod.api.enedis.fr"
+    api = "https://gw.ext.prod.api.enedis.fr"
