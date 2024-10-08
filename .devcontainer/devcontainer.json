@@ -4,7 +4,8 @@
 		"vscode": {
 			"extensions": [
 				"EditorConfig.EditorConfig",
-                "charliermarsh.ruff"
+				"charliermarsh.ruff",
+				"tamasfe.even-better-toml"
 			]
 		}
 	},

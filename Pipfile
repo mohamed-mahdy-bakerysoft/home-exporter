@@ -16,7 +16,7 @@ evohomeclient = "~=0.3.7"
 ruff = "~=0.6"
 
 [requires]
-python_version = "3.12"
+python_version = "3.13"
 
 [scripts]
 lint="ruff check ."
