@@ -9,5 +9,5 @@
 			]
 		}
 	},
-    "postCreateCommand": "pipenv install --dev"
+	"postCreateCommand": "uv sync"
 }
