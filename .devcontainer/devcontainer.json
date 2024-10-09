@@ -1,13 +1,13 @@
 {
-	"image": "mcr.microsoft.com/devcontainers/python",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"EditorConfig.EditorConfig",
-				"charliermarsh.ruff",
-				"tamasfe.even-better-toml"
-			]
-		}
-	},
-	"postCreateCommand": "uv sync"
+    "image": "mcr.microsoft.com/devcontainers/python",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "EditorConfig.EditorConfig",
+                "charliermarsh.ruff",
+                "tamasfe.even-better-toml"
+            ]
+        }
+    },
+    "postCreateCommand": "pipx install uv && uv sync"
 }
