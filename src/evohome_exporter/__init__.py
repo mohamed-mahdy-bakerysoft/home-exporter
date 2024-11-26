@@ -18,13 +18,18 @@ def fetch() -> Point:
     points = []
 
     try:
-        for device in client.temperatures():
-            points.append(Point("evohome_v1")
-                .tag('zone', device['name'])
-                .field('temperature', device['temp'])
-            )
-        # for location in client.locations:
-        #     for zone in location._gateways[0]._control_systems[0].zones:
+        for location in client.locations:
+            status = location.status()
+            for gateway in status["gateways"]:
+                for control_system in gateway["temperatureControlSystems"]:
+                    for zone in control_system["zones"]:
+                        points.append(Point("evohome_v1")
+                            .tag("zone", zone["name"])
+                            .field("temperature", zone["temperatureStatus"]["temperature"])
+                            .field("setpoint", zone["setpointStatus"]["targetHeatTemperature"])
+                            .field("mode", zone["setpointStatus"]["setpointMode"])
+                            .field("status", control_system["systemModeStatus"]["mode"])
+                        )
     except Exception as e:
         capture_exception(e)
 
