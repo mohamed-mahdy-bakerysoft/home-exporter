@@ -40,7 +40,7 @@ def fetch():
                     )
                 )
         # Hourly
-        delta = timedelta(days=1)
+        delta = timedelta(days=2)
         data = enedis.consumption_load_curve(
             os.environ.get("PDL"),
             from_date=(today - delta).isoformat(),
